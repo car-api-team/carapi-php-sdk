@@ -184,14 +184,13 @@ class CarApi
      * Return a single vehicle trim.
      *
      * @param int   $id      The ID of the Trim
-     * @param array $options An array of options to pass into the request.
      *
      * @return \stdClass
      * @throws CarApiException
      */
-    public function trimItem(int $id, array $options = []): \stdClass
+    public function trimItem(int $id): \stdClass
     {
-        return $this->getDecoded(sprintf('/trims/%s', $id), $options);
+        return $this->getDecoded(sprintf('/trims/%s', $id));
     }
 
     /**
@@ -322,7 +321,7 @@ class CarApi
      * @return mixed
      * @throws CarApiException
      */
-    private function getDecoded(string $url, array $options, ?bool $associative = null)
+    private function getDecoded(string $url, array $options = [], ?bool $associative = null)
     {
         $response = $this->get($url, $options);
         $body = (string) $response->getBody();
