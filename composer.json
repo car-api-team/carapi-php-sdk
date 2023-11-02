@@ -1,0 +1,40 @@
+{
+    "name": "car-api-team/carapi-php-sdk",
+    "description": "SDK for CarAPI. The developer friendly vehicle API.",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "carapi.app"
+        }
+    ],
+    "require": {
+        "php": "^7.4|^8.0",
+        "ext-json": "*",
+        "php-http/discovery": "^1.19",
+        "psr/http-client-implementation": "*",
+        "psr/http-factory-implementation": "*"
+    },
+    "require-dev": {
+        "josegonzalez/dotenv": "^4.0",
+        "phpunit/phpunit": "^10.4",
+        "php-http/mock-client": "^1.6",
+        "symfony/http-client": "^6.3",
+        "nyholm/psr7": "^1.8"
+    },
+    "autoload": {
+        "psr-4": {
+            "CarApiSdk\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Test\\": "tests/"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "php-http/discovery": false
+        }
+    }
+}
