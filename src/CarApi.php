@@ -183,7 +183,7 @@ class CarApi
     /**
      * Return a single vehicle trim.
      *
-     * @param int   $id      The ID of the Trim
+     * @param int $id The ID of the Trim
      *
      * @return \stdClass
      * @throws CarApiException
