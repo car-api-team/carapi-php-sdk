@@ -90,6 +90,12 @@ do {
 } while ($page <= $lastPage);
 ```
 
+### Exceptions
+
+The SDK will throw \CarApiSdk\CarApiException on errors. In some cases, this is just catching and rethrowing 
+underlying HTTP Exceptions or JSON Exceptions. In most cases, this will capture errors from the API response 
+and format them into a CarApiException.
+
 ### Years
 
 The years method returns an array of integers.
