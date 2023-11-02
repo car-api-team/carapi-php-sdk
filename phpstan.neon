@@ -1,0 +1,17 @@
+includes:
+    - phpstan-baseline.neon
+
+parameters:
+    level: 7
+    checkMissingIterableValueType: false
+    checkGenericClassInNonGenericObjectType: false
+    treatPhpDocTypesAsCertain: false
+    paths:
+        - src
+    earlyTerminatingMethodCalls:
+        Cake\Console\Shell:
+            - abort
+    reportUnmatchedIgnoredErrors: false
+    ignoreErrors:
+        - '#Attribute class AllowDynamicProperties does not exist.#'
+        - '#has no type specified.#'
