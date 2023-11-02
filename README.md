@@ -1,6 +1,10 @@
 # CarAPI PHP SDK
 
-PHP ^7.4 and ^8.0 compatible SDK for the developer friendly vehicle API. Please review our documentation for a better 
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/carapidev/carapi-php-sdk.svg?style=flat-square)](https://packagist.org/packages/carapidev/carapi-php-sdk)
+[![Build](https://github.com/carapidev/carapi-php-sdk/workflows/Build/badge.svg?branch=main)](https://github.com/carapidev/carapi-php-sdk/actions)
+[![Coverage Status](https://coveralls.io/repos/github/carapidev/carapi-php-sdk/badge.svg?branch=main)](https://coveralls.io/github/carapidev/carapi-php-sdk?branch=main)
+
+PHP ^7.4 and ^8.0 compatible [SDK for the developer friendly vehicle API](). Please review our documentation for a better 
 understanding of how this SDK works:
 
 - https://carapi.app/docs/
