@@ -10,10 +10,12 @@ class JsonSearchItem implements \JsonSerializable
     private $value;
 
     /**
-     * @param string $field The name of the field
-     * @param string $operator The operator type
-     * @param int|string|array|null $value Default value is null. A null value is only acceptable when using
-     * the "not null" or "is null" operators.
+     * Construct
+     *
+     * @param string                $field    The name of the field
+     * @param string                $operator The operator type
+     * @param int|string|array|null $value    Default value is null. A null value is only acceptable when using
+     *                                        the "not null" or "is null" operators.
      */
     public function __construct(string $field, string $operator, $value = null)
     {
@@ -23,7 +25,11 @@ class JsonSearchItem implements \JsonSerializable
     }
 
     /**
+     * Serializes the instance into JSON.
+     *
+     * @see        \JsonSerializable
      * @inheritdoc
+     * @return     array
      */
     public function jsonSerialize(): array
     {

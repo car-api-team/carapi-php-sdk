@@ -20,7 +20,14 @@ class CarApi
     private StreamFactoryInterface $streamFactory;
     private string $jwt;
 
-    public function __construct(CarApiConfig $config, Psr18Client $client = null) {
+    /**
+     * Construct
+     *
+     * @param CarApiConfig     $config An instance of CarApiConfig
+     * @param Psr18Client|null $client If left null an instance will be created automatically
+     */
+    public function __construct(CarApiConfig $config, Psr18Client $client = null)
+    {
         $this->config = $config;
         $this->client = $client ?? new Psr18Client();
         $this->streamFactory = Psr17FactoryDiscovery::findStreamFactory();
@@ -29,8 +36,8 @@ class CarApi
     /**
      * Builds the SDK. Look at CarApiConfig for all options possible.
      *
-     * @see CarApiConfig
-     * @param array $options
+     * @param array $options See CarApiConfig for options
+     *
      * @return self
      */
     public static function build(array $options): self
@@ -46,19 +53,27 @@ class CarApi
      */
     public function authenticate(): string
     {
+        try {
+            $json = json_encode(AuthDto::build($this->config), JSON_THROW_ON_ERROR);
+        } catch (\JsonException $e) {
+            throw new CarApiException('Unable to build JSON payload', 500, $e);
+        }
+
         $request = $this->client->createRequest('POST', sprintf('%s/auth/login', self::URL))
             ->withHeader('accept', 'text/plain')
             ->withHeader('Content-Type', 'application/json')
-            ->withBody($this->streamFactory->createStream(json_encode(AuthDto::build($this->config))));
+            ->withBody($this->streamFactory->createStream($json));
 
         $response = $this->sendRequest($request);
         $body = (string) $response->getBody();
         if ($response->getStatusCode() !== 200) {
-            throw new CarApiException(sprintf(
-                'HTTP %s - CarAPI authentication failed: %s',
-                $response->getStatusCode(),
-                $body
-            ));
+            throw new CarApiException(
+                sprintf(
+                    'HTTP %s - CarAPI authentication failed: %s',
+                    $response->getStatusCode(),
+                    $body
+                )
+            );
         }
 
         $pieces = explode('.', $body);
@@ -73,7 +88,8 @@ class CarApi
      * Returns a boolean indicating if the JWT has expired. If a null response is returned it means no JWT is set.
      *
      * @param int $buffer A buffer in seconds. This will check if the JWT is expired or will expire within $buffer
-     * seconds.
+     *                    seconds.
+     *
      * @return bool|null
      * @throws CarApiException
      */
@@ -101,7 +117,8 @@ class CarApi
     /**
      * Loads a JWT.
      *
-     * @param string $jwt
+     * @param string $jwt The JWT to be loaded
+     *
      * @return $this
      */
     public function loadJwt(string $jwt): self
@@ -115,6 +132,7 @@ class CarApi
      * Return vehicle years.
      *
      * @param array $options An array of options to pass into the request.
+     *
      * @return array
      * @throws CarApiException
      */
@@ -127,6 +145,7 @@ class CarApi
      * Return vehicle makes.
      *
      * @param array $options An array of options to pass into the request.
+     *
      * @return \stdClass
      * @throws CarApiException
      */
@@ -139,6 +158,7 @@ class CarApi
      * Return vehicle models
      *
      * @param array $options An array of options to pass into the request.
+     *
      * @return \stdClass
      * @throws CarApiException
      */
@@ -151,6 +171,7 @@ class CarApi
      * Return vehicle trims
      *
      * @param array $options An array of options to pass into the request.
+     *
      * @return \stdClass
      * @throws CarApiException
      */
@@ -162,8 +183,9 @@ class CarApi
     /**
      * Return a single vehicle trim.
      *
-     * @param int $id The ID of the Trim
+     * @param int   $id      The ID of the Trim
      * @param array $options An array of options to pass into the request.
+     *
      * @return \stdClass
      * @throws CarApiException
      */
@@ -175,8 +197,9 @@ class CarApi
     /**
      * Return a VIN.
      *
-     * @param string $vin The Vehicle Identification Number
-     * @param array $options An array of options to pass into the request.
+     * @param string $vin     The Vehicle Identification Number
+     * @param array  $options An array of options to pass into the request.
+     *
      * @return \stdClass
      * @throws CarApiException
      */
@@ -189,6 +212,7 @@ class CarApi
      * Return vehicle bodies.
      *
      * @param array $options An array of options to pass into the request.
+     *
      * @return \stdClass
      * @throws CarApiException
      */
@@ -201,6 +225,7 @@ class CarApi
      * Return vehicle engines.
      *
      * @param array $options An array of options to pass into the request.
+     *
      * @return \stdClass
      * @throws CarApiException
      */
@@ -213,6 +238,7 @@ class CarApi
      * Return vehicle mileages.
      *
      * @param array $options An array of options to pass into the request.
+     *
      * @return \stdClass
      * @throws CarApiException
      */
@@ -225,6 +251,7 @@ class CarApi
      * Return vehicle interior colors.
      *
      * @param array $options An array of options to pass into the request.
+     *
      * @return \stdClass
      * @throws CarApiException
      */
@@ -237,6 +264,7 @@ class CarApi
      * Return vehicle exterior colors.
      *
      * @param array $options An array of options to pass into the request.
+     *
      * @return \stdClass
      * @throws CarApiException
      */
@@ -249,6 +277,7 @@ class CarApi
      * Return vehicle attributes.
      *
      * @param string $attribute The name of the attribute
+     *
      * @return array
      * @throws CarApiException
      */
@@ -261,6 +290,7 @@ class CarApi
      * Return a history of total requests made by your account.
      *
      * @param array $options An array of options to pass into the request.
+     *
      * @return \stdClass
      * @throws CarApiException
      */
@@ -273,6 +303,7 @@ class CarApi
      * Return requests made by your account today.
      *
      * @param array $options An array of options to pass into the request.
+     *
      * @return \stdClass
      * @throws CarApiException
      */
@@ -282,7 +313,13 @@ class CarApi
     }
 
     /**
-     * @return array|\stdClass
+     * HTTP GET and decode the response.
+     *
+     * @param string    $url         The endpoint
+     * @param array     $options     Options to be passed to the endpoint
+     * @param bool|null $associative Whether decoding should be associative or not
+     *
+     * @return mixed
      * @throws CarApiException
      */
     private function getDecoded(string $url, array $options, ?bool $associative = null)
@@ -310,22 +347,29 @@ class CarApi
     }
 
     /**
+     * HTTP GET request
+     * 
+     * @param string $url     The endpoint being requested
+     * @param array  $options Options to be passed to the endpoint
+     *
+     * @return ResponseInterface
      * @throws CarApiException
      */
     private function get(string $url, array $options): ResponseInterface
     {
-        $query = array_map(function ($param) {
-            if ($param instanceof \JsonSerializable) {
-                return json_encode($param);
-            }
-            return $param;
-        }, $options['query'] ?? []);
+        $query = array_map(
+            function ($param) {
+                if ($param instanceof \JsonSerializable) {
+                    return json_encode($param);
+                }
+                return $param;
+            }, $options['query'] ?? []
+        );
 
         $uri = (new Uri(self::URL . $url))->withQuery(http_build_query($query));
 
         $request = $this->client->createRequest('GET', $uri)
-            ->withHeader('accept', 'application/json')
-            ->withBody($this->streamFactory->createStream(json_encode(AuthDto::build($this->config))));
+            ->withHeader('accept', 'application/json');
 
         if (!empty($this->jwt)) {
             $request = $request->withHeader('Authorization', sprintf('Bearer %s', $this->jwt));
@@ -335,6 +379,11 @@ class CarApi
     }
 
     /**
+     * Sends the request
+     *
+     * @param RequestInterface $request RequestInterface instance
+     *
+     * @return ResponseInterface
      * @throws CarApiException
      */
     private function sendRequest(RequestInterface $request): ResponseInterface
