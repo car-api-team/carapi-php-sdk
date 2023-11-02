@@ -4,7 +4,7 @@
 [![Build](https://github.com/carapidev/carapi-php-sdk/workflows/Build/badge.svg?branch=main)](https://github.com/carapidev/carapi-php-sdk/actions)
 [![Coverage Status](https://coveralls.io/repos/github/carapidev/carapi-php-sdk/badge.svg?branch=main)](https://coveralls.io/github/carapidev/carapi-php-sdk?branch=main)
 
-PHP ^7.4 and ^8.0 compatible [SDK for the developer friendly vehicle API](). Please review our documentation for a better 
+PHP ^7.4 and ^8.0 compatible SDK for the developer friendly vehicle API. Please review our documentation for a better 
 understanding of how this SDK works:
 
 - https://carapi.app/docs/
@@ -15,7 +15,7 @@ understanding of how this SDK works:
 Install the SDK using [composer](https://getcomposer.org/):
 
 ```console
-composer require car-api-team/carapi-php-sdk
+composer require carapidev/carapi-php-sdk
 ```
 
 If your project has a discoverable HTTP client then the SDK will use that automatically. If it does not, you will 
