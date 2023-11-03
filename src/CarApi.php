@@ -183,15 +183,14 @@ class CarApi
     /**
      * Return a single vehicle trim.
      *
-     * @param int   $id      The ID of the Trim
-     * @param array $options An array of options to pass into the request.
+     * @param int $id The ID of the Trim
      *
      * @return \stdClass
      * @throws CarApiException
      */
-    public function trimItem(int $id, array $options = []): \stdClass
+    public function trimItem(int $id): \stdClass
     {
-        return $this->getDecoded(sprintf('/trims/%s', $id), $options);
+        return $this->getDecoded(sprintf('/trims/%s', $id));
     }
 
     /**
@@ -283,33 +282,29 @@ class CarApi
      */
     public function vehicleAttributes(string $attribute): array
     {
-        return $this->getDecoded(sprintf('/vehicle-attributes/%s', $attribute), [], true);
+        return $this->getDecoded('/vehicle-attributes', ['query' => ['attribute' => $attribute]], true);
     }
 
     /**
      * Return a history of total requests made by your account.
      *
-     * @param array $options An array of options to pass into the request.
-     *
      * @return \stdClass
      * @throws CarApiException
      */
-    public function accountRequests(array $options = []): \stdClass
+    public function accountRequests(): \stdClass
     {
-        return $this->getDecoded('/account/requests', $options);
+        return $this->getDecoded('/account/requests');
     }
 
     /**
      * Return requests made by your account today.
      *
-     * @param array $options An array of options to pass into the request.
-     *
      * @return \stdClass
      * @throws CarApiException
      */
-    public function accountRequestsToday(array $options = []): \stdClass
+    public function accountRequestsToday(): \stdClass
     {
-        return $this->getDecoded('/account/requests-today', $options);
+        return $this->getDecoded('/account/requests-today');
     }
 
     /**
@@ -322,7 +317,7 @@ class CarApi
      * @return mixed
      * @throws CarApiException
      */
-    private function getDecoded(string $url, array $options, ?bool $associative = null)
+    private function getDecoded(string $url, array $options = [], ?bool $associative = null)
     {
         $response = $this->get($url, $options);
         $body = (string) $response->getBody();

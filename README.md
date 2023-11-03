@@ -1,10 +1,10 @@
 # CarAPI PHP SDK
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/carapidev/carapi-php-sdk.svg?style=flat-square)](https://packagist.org/packages/carapidev/carapi-php-sdk)
-[![Build](https://github.com/carapidev/carapi-php-sdk/workflows/Build/badge.svg?branch=main)](https://github.com/carapidev/carapi-php-sdk/actions)
-[![Coverage Status](https://coveralls.io/repos/github/carapidev/carapi-php-sdk/badge.svg?branch=main)](https://coveralls.io/github/carapidev/carapi-php-sdk?branch=main)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/car-api-team/carapi-php-sdk.svg?style=flat-square)](https://packagist.org/packages/car-api-team/carapi-php-sdk)
+[![Build](https://github.com/car-api-team/carapi-php-sdk/workflows/Build/badge.svg?branch=main)](https://github.com/car-api-team/carapi-php-sdk/actions)
+[![Coverage Status](https://coveralls.io/repos/github/car-api-team/carapi-php-sdk/badge.svg?branch=main)](https://coveralls.io/github/car-api-team/carapi-php-sdk?branch=main)
 
-PHP ^7.4 and ^8.0 compatible [SDK for the developer friendly vehicle API](). Please review our documentation for a better 
+PHP ^7.4 and ^8.0 compatible SDK for the developer friendly vehicle API. Please review our documentation for a better 
 understanding of how this SDK works:
 
 - https://carapi.app/docs/
@@ -89,6 +89,12 @@ do {
     print_r($result->data);
 } while ($page <= $lastPage);
 ```
+
+### Exceptions
+
+The SDK will throw \CarApiSdk\CarApiException on errors. In some cases, this is just catching and rethrowing 
+underlying HTTP Exceptions or JSON Exceptions. In most cases, this will capture errors from the API response 
+and format them into a CarApiException.
 
 ### Years
 
