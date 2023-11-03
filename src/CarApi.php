@@ -282,33 +282,29 @@ class CarApi
      */
     public function vehicleAttributes(string $attribute): array
     {
-        return $this->getDecoded(sprintf('/vehicle-attributes/%s', $attribute), [], true);
+        return $this->getDecoded('/vehicle-attributes', ['query' => ['attribute' => $attribute]], true);
     }
 
     /**
      * Return a history of total requests made by your account.
      *
-     * @param array $options An array of options to pass into the request.
-     *
      * @return \stdClass
      * @throws CarApiException
      */
-    public function accountRequests(array $options = []): \stdClass
+    public function accountRequests(): \stdClass
     {
-        return $this->getDecoded('/account/requests', $options);
+        return $this->getDecoded('/account/requests');
     }
 
     /**
      * Return requests made by your account today.
      *
-     * @param array $options An array of options to pass into the request.
-     *
      * @return \stdClass
      * @throws CarApiException
      */
-    public function accountRequestsToday(array $options = []): \stdClass
+    public function accountRequestsToday(): \stdClass
     {
-        return $this->getDecoded('/account/requests-today', $options);
+        return $this->getDecoded('/account/requests-today');
     }
 
     /**
