@@ -1,7 +1,7 @@
 # CarAPI PHP SDK
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/car-api-team/carapi-php-sdk.svg?style=flat-square)](https://packagist.org/packages/car-api-team/carapi-php-sdk)
-[![Build](https://github.com/car-api-team/carapi-php-sdk/workflows/Build/badge.svg?branch=main)](https://github.com/car-api-team/carapi-php-sdk/actions)
+[![Build](https://github.com/car-api-team/carapi-php-sdk/actions/workflows/build.yml/badge.svg)](https://github.com/car-api-team/carapi-php-sdk/actions/workflows/build.yml)
 [![Coverage Status](https://coveralls.io/repos/github/car-api-team/carapi-php-sdk/badge.svg?branch=main)](https://coveralls.io/github/car-api-team/carapi-php-sdk?branch=main)
 
 PHP ^7.4 and ^8.0 compatible SDK for the developer friendly vehicle API. Please review our documentation for a better 
