@@ -1,5 +1,5 @@
 {
-    "name": "carapidev/carapi-php-sdk",
+    "name": "car-api-team/carapi-php-sdk",
     "description": "SDK for CarAPI. The developer friendly vehicle API.",
     "type": "library",
     "license": "MIT",
