@@ -126,7 +126,7 @@ foreach ($sdk->makes()->data as $make) {
 Get all makes for 2020:
 
 ```php
-$sdk->makes(['query' => ['year' => 'Tesla']]);
+$sdk->makes(['query' => ['year' => 2020]]);
 ```
 
 ### Models
