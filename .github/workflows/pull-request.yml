@@ -34,6 +34,32 @@ jobs:
         run: |
           composer analyze
           echo ${{ matrix.php-versions }}
+  no_dev_mode:
+    name: Test with --no-dev
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.4'
+
+      - name: Install dependencies
+        if: steps.composer-cache.outputs.cache-hit != 'true'
+        run: |
+          composer self-update
+          composer validate
+          composer install --prefer-dist --no-progress --no-dev
+          composer require guzzlehttp/guzzle
+
+      - name: Test
+        env:
+          CARAPI_TOKEN: ${{ secrets.CARAPI_TOKEN }}
+          CARAPI_SECRET: ${{ secrets.CARAPI_TOKEN }}
+        run: |
+          php tests/no_dev_test.php
 
   coverage:
     name: Code Coverage
