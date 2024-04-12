@@ -59,6 +59,7 @@ jobs:
           CARAPI_TOKEN: ${{ secrets.CARAPI_TOKEN }}
           CARAPI_SECRET: ${{ secrets.CARAPI_SECRET }}
         run: |
+          echo $CARAPI_TOKEN
           php tests/no_dev_test.php
 
   coverage:
