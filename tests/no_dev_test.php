@@ -6,7 +6,7 @@ require __DIR__ . '/../vendor/autoload.php';
 use CarApiSdk\CarApi;
 use CarApiSdk\JsonSearch;
 use CarApiSdk\JsonSearchItem;
-
+var_dump(getenv('CARPI_TOKEN'));
 $sdk = CarApi::build([
     'token' => getenv('CARPI_TOKEN'),
     'secret' => getenv('CARPI_SECRET'),
