@@ -5,11 +5,11 @@ namespace CarApiSdk;
 
 use Http\Discovery\Psr17FactoryDiscovery;
 use Http\Discovery\Psr18Client;
-use Nyholm\Psr7\Uri;
 use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamFactoryInterface;
+use Psr\Http\Message\UriFactoryInterface;
 
 class CarApi
 {
@@ -18,6 +18,7 @@ class CarApi
     private CarApiConfig $config;
     private Psr18Client $client;
     private StreamFactoryInterface $streamFactory;
+    private UriFactoryInterface $uriFactory;
     private string $jwt;
 
     /**
@@ -31,6 +32,7 @@ class CarApi
         $this->config = $config;
         $this->client = $client ?? new Psr18Client();
         $this->streamFactory = Psr17FactoryDiscovery::findStreamFactory();
+        $this->uriFactory = Psr17FactoryDiscovery::findUriFactory();
     }
 
     /**
@@ -343,7 +345,7 @@ class CarApi
 
     /**
      * HTTP GET request
-     * 
+     *
      * @param string $url     The endpoint being requested
      * @param array  $options Options to be passed to the endpoint
      *
@@ -361,7 +363,7 @@ class CarApi
             }, $options['query'] ?? []
         );
 
-        $uri = (new Uri(self::URL . $url))->withQuery(http_build_query($query));
+        $uri = $this->uriFactory->createUri(self::URL . $url)->withQuery(http_build_query($query));
 
         $request = $this->client->createRequest('GET', $uri)
             ->withHeader('accept', 'application/json');
