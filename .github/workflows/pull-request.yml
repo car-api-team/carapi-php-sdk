@@ -57,7 +57,7 @@ jobs:
       - name: Test
         env:
           CARAPI_TOKEN: ${{ secrets.CARAPI_TOKEN }}
-          CARAPI_SECRET: ${{ secrets.CARAPI_TOKEN }}
+          CARAPI_SECRET: ${{ secrets.CARAPI_SECRET }}
         run: |
           php tests/no_dev_test.php
 
