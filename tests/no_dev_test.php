@@ -10,4 +10,4 @@ $sdk = CarApi::build([
     'secret' => 'test',
 ]);
 
-println('Done!');
+echo "done";
