@@ -310,7 +310,7 @@ class CarApi
     }
 
     /**
-     * Returns when the csv data feed was last modified
+     * Returns the datafeed result as a ResponseInterface
      *
      * @return ResponseInterface
      * @throws CarApiException
