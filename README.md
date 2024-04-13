@@ -247,6 +247,24 @@ Returns a collection.
 $sdk->exteriorColors();
 ```
 
+
+### CSV Datafeed
+
+Returns the datafeed as a ResponseInterface. You will need handle extracting the file out in your application.
+
+```php
+$sdk->csvDataFeed();
+```
+
+### CSV Datafeed Last Update
+
+Returns an object.
+
+```php
+$sdk->csvDataFeedLastUpdated();
+```
+
+
 ### Vehicle Attributes
 
 Returns an array of strings.

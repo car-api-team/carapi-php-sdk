@@ -14,6 +14,24 @@ use PHPUnit\Framework\TestCase;
 
 class CarApiTest extends TestCase
 {
+    /**
+     * @dataProvider dataProviderForBuildOptions
+     */
+    public function test_build_errors_with_missing_options(array $options): void
+    {
+        $this->expectException(CarApiException::class);
+        CarApiConfig::build($options);
+    }
+
+    public static function dataProviderForBuildOptions(): array
+    {
+        return [
+            [[]],
+            [['token' => '123']],
+            [['secret' => '123']],
+        ];
+    }
+
     public function test_authenticate(): void
     {
         $config = CarApiConfig::build(['token' => '1', 'secret' => '1']);
@@ -70,6 +88,7 @@ class CarApiTest extends TestCase
             ['exteriorColors'],
             ['accountRequests'],
             ['accountRequestsToday'],
+            ['csvDataFeedLastUpdated'],
         ];
     }
 
@@ -107,6 +126,14 @@ class CarApiTest extends TestCase
         $sdk = new CarApi($config, $client);
         $arr = $sdk->vehicleAttributes('tesst');
         $this->assertNotEmpty($arr);
+    }
+
+    public function test_csv_datafeed()
+    {
+        $config = CarApiConfig::build(['token' => '1', 'secret' => '1']);
+        $client = $this->createMockClient(200, '');
+        $sdk = new CarApi($config, $client);
+        $this->assertInstanceOf(\Psr\Http\Message\ResponseInterface::class, $sdk->csvDataFeed());
     }
 
     public function test_exception_response(): void
