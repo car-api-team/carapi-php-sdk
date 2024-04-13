@@ -13,8 +13,7 @@ use Psr\Http\Message\UriFactoryInterface;
 
 class CarApi
 {
-    private const URL = 'https://carapi.app/api';
-
+    private string $host;
     private CarApiConfig $config;
     private Psr18Client $client;
     private StreamFactoryInterface $streamFactory;
@@ -31,6 +30,7 @@ class CarApi
     {
         $this->config = $config;
         $this->client = $client ?? new Psr18Client();
+        $this->host = ($config->host ?? 'https://carapi.app') . '/api';
         $this->streamFactory = Psr17FactoryDiscovery::findStreamFactory();
         $this->uriFactory = Psr17FactoryDiscovery::findUriFactory();
     }
@@ -44,7 +44,7 @@ class CarApi
      */
     public static function build(array $options): self
     {
-        return new self(new CarApiConfig($options['token'], $options['secret']));
+        return new self(CarApiConfig::build($options));
     }
 
     /**
@@ -61,7 +61,7 @@ class CarApi
             throw new CarApiException('Unable to build JSON payload', 500, $e);
         }
 
-        $request = $this->client->createRequest('POST', sprintf('%s/auth/login', self::URL))
+        $request = $this->client->createRequest('POST', sprintf('%s/auth/login', $this->host))
             ->withHeader('accept', 'text/plain')
             ->withHeader('Content-Type', 'application/json')
             ->withBody($this->streamFactory->createStream($json));
@@ -310,6 +310,51 @@ class CarApi
     }
 
     /**
+     * Returns when the csv data feed was last modified
+     *
+     * @return ResponseInterface
+     * @throws CarApiException
+     */
+    public function csvDataFeed(): ResponseInterface
+    {
+        $uri = $this->uriFactory->createUri($this->host . '/data-feeds/download');
+
+        $request = $this->client->createRequest('GET', $uri)
+            ->withHeader('accept', 'text/plain');
+
+        if (!empty($this->jwt)) {
+            $request = $request->withHeader('Authorization', sprintf('Bearer %s', $this->jwt));
+        }
+
+        return $this->sendRequest($request);
+    }
+
+    /**
+     * Returns when the csv data feed was last modified
+     *
+     * @return \StdClass
+     * @throws CarApiException
+     */
+    public function csvDataFeedLastUpdated(): \StdClass
+    {
+        return $this->getDecoded('/data-feeds/last-updated');
+    }
+
+    /**
+     * Get the JWT
+     *
+     * @return string|null
+     */
+    public function getJwt(): ?string
+    {
+        if (empty($this->jwt)) {
+            return null;
+        }
+
+        return $this->jwt;
+    }
+
+    /**
      * HTTP GET and decode the response.
      *
      * @param string    $url         The endpoint
@@ -363,7 +408,7 @@ class CarApi
             }, $options['query'] ?? []
         );
 
-        $uri = $this->uriFactory->createUri(self::URL . $url)->withQuery(http_build_query($query));
+        $uri = $this->uriFactory->createUri($this->host . $url)->withQuery(http_build_query($query));
 
         $request = $this->client->createRequest('GET', $uri)
             ->withHeader('accept', 'application/json');
