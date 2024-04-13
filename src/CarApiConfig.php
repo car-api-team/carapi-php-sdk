@@ -12,9 +12,9 @@ class CarApiConfig
     /**
      * Constructor
      *
-     * @param string $token  Your token
-     * @param string $secret Your secret
-     * @param string|null $host Defaults to carapi.app and should be left null
+     * @param string      $token  Your token
+     * @param string      $secret Your secret
+     * @param string|null $host   Defaults to carapi.app and should be left null
      */
     public function __construct(string $token, string $secret, ?string $host = null)
     {
