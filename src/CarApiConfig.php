@@ -55,7 +55,7 @@ class CarApiConfig
             $configs['token'],
             $configs['secret'],
             $configs['host'] ?? null,
-            $configs['htttVersion'] ?? '1.1',
+            $configs['httpVersion'] ?? '1.1',
             $configs['encoding'] ?? [],
         );
     }
