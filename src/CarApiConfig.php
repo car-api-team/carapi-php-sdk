@@ -15,11 +15,11 @@ class CarApiConfig
     /**
      * Constructor
      *
-     * @param string      $token  Your token
-     * @param string      $secret Your secret
-     * @param string|null $host   Defaults to carapi.app and should be left null
-     * @param string $httpVersion Defaults to HTTP 2
-     * @param string $encoding String to send in the accepts-encoding request header, default: 'gzip, deflate, br, zstd'
+     * @param string      $token       Your token
+     * @param string      $secret      Your secret
+     * @param string|null $host        Defaults to carapi.app and should be left null
+     * @param string      $httpVersion Defaults to HTTP 2
+     * @param string      $encoding    Sets the accepts-encoding request header, default: 'gzip, deflate, br, zstd'
      */
     public function __construct(
         string $token,
@@ -27,8 +27,7 @@ class CarApiConfig
         ?string $host = null,
         string $httpVersion = '2',
         string $encoding = 'gzip, deflate, br, zstd'
-    )
-    {
+    ) {
         $this->token = $token;
         $this->secret = $secret;
         $this->host = $host;
