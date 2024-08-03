@@ -78,6 +78,10 @@ class CarApi
             );
         }
 
+        if (in_array('gzip', $this->config->encoding) && \extension_loaded('zlib')) {
+            $body = gzdecode($body);
+        }
+
         $pieces = explode('.', $body);
         if (count($pieces) !== 3) {
             throw new CarApiException('Invalid JWT');
