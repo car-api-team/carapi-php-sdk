@@ -8,9 +8,7 @@ class CarApiConfig
     public string $token;
     public string $secret;
     public ?string $host;
-
     public string $httpVersion;
-    /** @var string[]  */
     public array $encoding;
 
     /**
@@ -20,8 +18,9 @@ class CarApiConfig
      * @param string      $secret      Your secret
      * @param string|null $host        Defaults to carapi.app and should be left null
      * @param string      $httpVersion Defaults to HTTP 2
-     * @param array      $encoding    Sets the accepts-encoding request header, default: []. To enable decoding
-     *                                set this option to ['gzip'] and ensure you have the gzip extension loaded.
+     * @param array       $encoding    Sets the accepts-encoding request header, default: []. To enable decoding
+     *                                 set this option to ['gzip'] and ensure you have the gzip extension
+     *                                 loaded.
      */
     public function __construct(
         string $token,
