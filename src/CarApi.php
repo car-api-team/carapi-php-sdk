@@ -324,8 +324,7 @@ class CarApi
         $uri = $this->uriFactory->createUri($this->host . '/data-feeds/download');
 
         $request = $this->client->createRequest('GET', $uri)
-            ->withHeader('accept', 'text/plain')
-            ->withHeader('accept-encoding', $this->config->encoding);
+            ->withHeader('accept', 'text/plain');
 
         if (!empty($this->jwt)) {
             $request = $request->withHeader('Authorization', sprintf('Bearer %s', $this->jwt));
