@@ -63,7 +63,9 @@ class CarApi
 
         $request = $this->client->createRequest('POST', sprintf('%s/auth/login', $this->host))
             ->withHeader('accept', 'text/plain')
-            ->withHeader('Content-Type', 'application/json')
+            ->withHeader('content-type', 'application/json')
+            ->withHeader('accept-encoding', $this->config->encoding)
+            ->withProtocolVersion($this->config->httpVersion)
             ->withBody($this->streamFactory->createStream($json));
 
         $response = $this->sendRequest($request);
@@ -320,7 +322,9 @@ class CarApi
         $uri = $this->uriFactory->createUri($this->host . '/data-feeds/download');
 
         $request = $this->client->createRequest('GET', $uri)
-            ->withHeader('accept', 'text/plain');
+            ->withHeader('accept', 'text/plain')
+            ->withHeader('accept-encoding', $this->config->encoding)
+            ->withProtocolVersion($this->config->httpVersion);
 
         if (!empty($this->jwt)) {
             $request = $request->withHeader('Authorization', sprintf('Bearer %s', $this->jwt));
@@ -411,7 +415,9 @@ class CarApi
         $uri = $this->uriFactory->createUri($this->host . $url)->withQuery(http_build_query($query));
 
         $request = $this->client->createRequest('GET', $uri)
-            ->withHeader('accept', 'application/json');
+            ->withHeader('accept', 'application/json')
+            ->withHeader('accept-encoding', $this->config->encoding)
+            ->withProtocolVersion($this->config->httpVersion);
 
         if (!empty($this->jwt)) {
             $request = $request->withHeader('Authorization', sprintf('Bearer %s', $this->jwt));

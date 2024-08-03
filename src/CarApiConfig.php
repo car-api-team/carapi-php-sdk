@@ -9,18 +9,31 @@ class CarApiConfig
     public string $secret;
     public ?string $host;
 
+    public string $httpVersion;
+    public string $encoding;
+
     /**
      * Constructor
      *
      * @param string      $token  Your token
      * @param string      $secret Your secret
      * @param string|null $host   Defaults to carapi.app and should be left null
+     * @param string $httpVersion Defaults to HTTP 2
+     * @param string $encoding String to send in the accepts-encoding request header, default: 'gzip, deflate, br, zstd'
      */
-    public function __construct(string $token, string $secret, ?string $host = null)
+    public function __construct(
+        string $token,
+        string $secret,
+        ?string $host = null,
+        string $httpVersion = '2',
+        string $encoding = 'gzip, deflate, br, zstd'
+    )
     {
         $this->token = $token;
         $this->secret = $secret;
         $this->host = $host;
+        $this->httpVersion = $httpVersion;
+        $this->encoding = $encoding;
     }
 
     /**
@@ -40,6 +53,8 @@ class CarApiConfig
             $configs['token'],
             $configs['secret'],
             $configs['host'] ?? null,
+            $configs['htttVersion'] ?? '2',
+            $configs['encoding'] ?? 'gzip, deflate, br, zstd',
         );
     }
 }
