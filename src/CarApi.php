@@ -64,8 +64,6 @@ class CarApi
         $request = $this->client->createRequest('POST', sprintf('%s/auth/login', $this->host))
             ->withHeader('accept', 'text/plain')
             ->withHeader('content-type', 'application/json')
-            ->withHeader('accept-encoding', $this->config->encoding)
-            ->withProtocolVersion($this->config->httpVersion)
             ->withBody($this->streamFactory->createStream($json));
 
         $response = $this->sendRequest($request);
@@ -323,8 +321,7 @@ class CarApi
 
         $request = $this->client->createRequest('GET', $uri)
             ->withHeader('accept', 'text/plain')
-            ->withHeader('accept-encoding', $this->config->encoding)
-            ->withProtocolVersion($this->config->httpVersion);
+            ->withHeader('accept-encoding', $this->config->encoding);
 
         if (!empty($this->jwt)) {
             $request = $request->withHeader('Authorization', sprintf('Bearer %s', $this->jwt));
@@ -373,6 +370,10 @@ class CarApi
         $response = $this->get($url, $options);
         $body = (string) $response->getBody();
 
+        if (in_array('gzip', $this->config->encoding) && \extension_loaded('zlib')) {
+            $body = gzdecode($body);
+        }
+
         try {
             $decoded = json_decode($body, $associative, 512, JSON_THROW_ON_ERROR);
             if ($response->getStatusCode() !== 200) {
@@ -415,9 +416,7 @@ class CarApi
         $uri = $this->uriFactory->createUri($this->host . $url)->withQuery(http_build_query($query));
 
         $request = $this->client->createRequest('GET', $uri)
-            ->withHeader('accept', 'application/json')
-            ->withHeader('accept-encoding', $this->config->encoding)
-            ->withProtocolVersion($this->config->httpVersion);
+            ->withHeader('accept', 'application/json');
 
         if (!empty($this->jwt)) {
             $request = $request->withHeader('Authorization', sprintf('Bearer %s', $this->jwt));
@@ -436,8 +435,12 @@ class CarApi
      */
     private function sendRequest(RequestInterface $request): ResponseInterface
     {
+        if (in_array('gzip', $this->config->encoding) && \extension_loaded('zlib')) {
+            $request = $request->withHeader('accept-encoding', 'gzip');
+        }
+
         try {
-            return $this->client->sendRequest($request);
+            return $this->client->sendRequest($request->withProtocolVersion($this->config->httpVersion));
         } catch (ClientExceptionInterface $e) {
             throw new CarApiException($e->getMessage(), $e->getCode(), $e);
         }
