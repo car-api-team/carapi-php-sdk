@@ -62,6 +62,7 @@ class CarApi
         }
 
         $request = $this->client->createRequest('POST', sprintf('%s/auth/login', $this->host))
+            ->withProtocolVersion($this->config->httpVersion)
             ->withHeader('accept', 'text/plain')
             ->withHeader('content-type', 'application/json')
             ->withBody($this->streamFactory->createStream($json));
