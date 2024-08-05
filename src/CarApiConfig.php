@@ -17,7 +17,7 @@ class CarApiConfig
      * @param string      $token       Your token
      * @param string      $secret      Your secret
      * @param string|null $host        Defaults to carapi.app and should be left null
-     * @param string      $httpVersion Defaults to HTTP 2
+     * @param string      $httpVersion Defaults to HTTP 1.1
      * @param array       $encoding    Sets the accepts-encoding request header, default: []. To enable decoding
      *                                 set this option to ['gzip'] and ensure you have the gzip extension
      *                                 loaded.
