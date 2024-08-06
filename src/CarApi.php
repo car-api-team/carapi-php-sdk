@@ -61,11 +61,14 @@ class CarApi
             throw new CarApiException('Unable to build JSON payload', 500, $e);
         }
 
+        $stream = $this->streamFactory->createStream($json);
+
         $request = $this->client->createRequest('POST', sprintf('%s/auth/login', $this->host))
             ->withProtocolVersion($this->config->httpVersion)
             ->withHeader('accept', 'text/plain')
             ->withHeader('content-type', 'application/json')
-            ->withBody($this->streamFactory->createStream($json));
+            ->withHeader('content-length', $stream->getSize())
+            ->withBody($stream);
 
         $response = $this->sendRequest($request);
         $body = (string) $response->getBody();
