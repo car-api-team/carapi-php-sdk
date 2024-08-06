@@ -57,6 +57,9 @@ class CarApi
     {
         try {
             $json = json_encode(AuthDto::build($this->config), JSON_THROW_ON_ERROR);
+            if ($json === false) {
+                throw new \JsonException('JSON Payload is false');
+            }
         } catch (\JsonException $e) {
             throw new CarApiException('Unable to build JSON payload', 500, $e);
         }
@@ -67,7 +70,7 @@ class CarApi
             ->withProtocolVersion($this->config->httpVersion)
             ->withHeader('accept', 'text/plain')
             ->withHeader('content-type', 'application/json')
-            ->withHeader('content-length', $stream->getSize())
+            ->withHeader('content-length', (string) $stream->getSize())
             ->withBody($stream);
 
         $response = $this->sendRequest($request);
