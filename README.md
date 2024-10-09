@@ -37,8 +37,8 @@ You have now created an instance of the SDK.
 
 ### Other Options
 
-You may also set `httpVersion` and `encoding`. The HTTP version defaults to 1.1 and we recommend keeping at that level. 
-Encoding is off by default, but GZIP is supported. Example:
+You may also set `httpVersion` and `encoding`. The HTTP version defaults to 1.1 and we recommend keeping it at that 
+version. Encoding is off by default, but GZIP is supported (note: you will need the zlib extension loaded). Example:
 
 ```php
 $sdk = \CarApiSdk\CarApi::build([
