@@ -35,6 +35,20 @@ $sdk = \CarApiSdk\CarApi::build([
 
 You have now created an instance of the SDK.
 
+### Other Options
+
+You may also set `httpVersion` and `encoding`. The HTTP version defaults to 1.1 and we recommend keeping at that level. 
+Encoding is off by default, but GZIP is supported. Example:
+
+```php
+$sdk = \CarApiSdk\CarApi::build([
+    'token' => getenv('CARAPI_TOKEN'),
+    'secret' => getenv('CARAPI_SECRET'),
+    'httpVersion' => '2.0', // we recommend keeping the default 1.1
+    'encoding' => ['gzip'],
+]);
+```
+
 ### Authentication
 
 The authenticate method will both return a JWT and store the JWT in the SDK internally. There is no persistent 

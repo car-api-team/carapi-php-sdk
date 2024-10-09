@@ -57,14 +57,21 @@ class CarApi
     {
         try {
             $json = json_encode(AuthDto::build($this->config), JSON_THROW_ON_ERROR);
+            if ($json === false) {
+                throw new \JsonException('JSON Payload is false');
+            }
         } catch (\JsonException $e) {
             throw new CarApiException('Unable to build JSON payload', 500, $e);
         }
 
+        $stream = $this->streamFactory->createStream($json);
+
         $request = $this->client->createRequest('POST', sprintf('%s/auth/login', $this->host))
+            ->withProtocolVersion($this->config->httpVersion)
             ->withHeader('accept', 'text/plain')
-            ->withHeader('Content-Type', 'application/json')
-            ->withBody($this->streamFactory->createStream($json));
+            ->withHeader('content-type', 'application/json')
+            ->withHeader('content-length', (string) $stream->getSize())
+            ->withBody($stream);
 
         $response = $this->sendRequest($request);
         $body = (string) $response->getBody();
@@ -76,6 +83,13 @@ class CarApi
                     $body
                 )
             );
+        }
+
+        if (in_array('gzip', $this->config->encoding) && \extension_loaded('zlib')) {
+            $body = gzdecode($body);
+            if ($body === false) {
+                throw new CarApiException('Unable to decompress response. Maybe try without gzip.');
+            }
         }
 
         $pieces = explode('.', $body);
@@ -369,6 +383,13 @@ class CarApi
         $response = $this->get($url, $options);
         $body = (string) $response->getBody();
 
+        if (in_array('gzip', $this->config->encoding) && \extension_loaded('zlib')) {
+            $body = gzdecode($body);
+            if ($body === false) {
+                throw new CarApiException('Unable to decompress response. Maybe try without gzip.');
+            }
+        }
+
         try {
             $decoded = json_decode($body, $associative, 512, JSON_THROW_ON_ERROR);
             if ($response->getStatusCode() !== 200) {
@@ -430,8 +451,12 @@ class CarApi
      */
     private function sendRequest(RequestInterface $request): ResponseInterface
     {
+        if (in_array('gzip', $this->config->encoding) && \extension_loaded('zlib')) {
+            $request = $request->withHeader('accept-encoding', 'gzip');
+        }
+
         try {
-            return $this->client->sendRequest($request);
+            return $this->client->sendRequest($request->withProtocolVersion($this->config->httpVersion));
         } catch (ClientExceptionInterface $e) {
             throw new CarApiException($e->getMessage(), $e->getCode(), $e);
         }
