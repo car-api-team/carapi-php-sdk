@@ -5,11 +5,8 @@
 [![Coverage Status](https://coveralls.io/repos/github/car-api-team/carapi-php-sdk/badge.svg?branch=main)](https://coveralls.io/github/car-api-team/carapi-php-sdk?branch=main)
 
 PHP ^7.4 and ^8.0 compatible SDK for the developer friendly vehicle API. Please review our documentation for a better 
-understanding of how this SDK works:
+understanding of how this SDK works: https://carapi.app/docs/
 
-- https://carapi.app/docs/
-- https://api.carapi.app/oem (v2)
-- https://carapi.app/api (v1)
 
 <!-- TOC -->
 * [CarAPI PHP SDK](#carapi-php-sdk)
@@ -159,8 +156,9 @@ and format them into a CarApiException.
 
 ## V2 OEM API Methods
 
-Browse the [V2 OEM API methods](/docs/v2.md)
+Browse the [V2 OEM API methods](/docs/v2.md). These methods call the following endpoints: https://api.carapi.app/oem
+
 
 ## V1 API Methods
 
-Browse the [V1 API methods](/docs/v1.md)
+Browse the [V1 API methods](/docs/v1.md). These methods call the following endpoints: https://carapi.app/api
