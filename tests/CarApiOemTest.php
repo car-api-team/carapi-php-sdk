@@ -84,7 +84,7 @@ class CarApiOemTest extends TestCase
             ['trims'],
             ['accountRequests'],
             ['accountRequestsToday'],
-            ['csvDataFeedLastUpdated'],
+            ['dataFeedLastUpdated'],
         ];
     }
 
@@ -133,12 +133,12 @@ class CarApiOemTest extends TestCase
         $this->assertNotEmpty($arr);
     }
 
-    public function test_csv_datafeed()
+    public function test_datafeed()
     {
         $config = CarApiConfig::build(['token' => '1', 'secret' => '1']);
         $client = $this->createMockClient(200, '');
         $sdk = new CarApiOem($config, $client);
-        $this->assertInstanceOf(\Psr\Http\Message\ResponseInterface::class, $sdk->csvDataFeed());
+        $this->assertInstanceOf(\Psr\Http\Message\ResponseInterface::class, $sdk->dataFeed());
     }
 
     public function test_exception_response(): void

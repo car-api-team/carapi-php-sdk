@@ -291,7 +291,7 @@ class CarApiOem
      * @return ResponseInterface
      * @throws CarApiException
      */
-    public function csvDataFeed(): ResponseInterface
+    public function dataFeed(): ResponseInterface
     {
         $uri = $this->uriFactory->createUri($this->host . '/data-feeds/download');
 
@@ -311,7 +311,7 @@ class CarApiOem
      * @return \StdClass
      * @throws CarApiException
      */
-    public function csvDataFeedLastUpdated(): \StdClass
+    public function dataFeedLastUpdated(): \StdClass
     {
         return $this->getDecoded('/data-feeds/last-updated');
     }
