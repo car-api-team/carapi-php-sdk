@@ -8,7 +8,40 @@ PHP ^7.4 and ^8.0 compatible SDK for the developer friendly vehicle API. Please 
 understanding of how this SDK works:
 
 - https://carapi.app/docs/
-- https://carapi.app/api
+- https://api.carapi.app/oem (v2)
+- https://carapi.app/api (v1)
+
+<!-- TOC -->
+* [CarAPI PHP SDK](#carapi-php-sdk)
+  * [Install](#install)
+  * [General Usage](#general-usage)
+    * [Other Options](#other-options)
+    * [Authentication](#authentication)
+    * [Passing query parameters](#passing-query-parameters)
+    * [Passing JSON searches](#passing-json-searches)
+    * [Pagination](#pagination)
+    * [Exceptions](#exceptions)
+  * [V2 OEM API Methods](#v2-oem-api-methods)
+    * [OEM Years](#oem-years)
+    * [OEM Makes](#oem-makes)
+    * [OEM Models](#oem-models)
+  * [V1 API Methods](#v1-api-methods)
+    * [Years](#years-1)
+    * [Makes](#makes-1)
+    * [Models](#models-1)
+    * [Trims](#trims)
+    * [Vin](#vin)
+    * [Bodies](#bodies)
+    * [Engines](#engines)
+    * [Mileages](#mileages)
+    * [Interior Colors](#interior-colors)
+    * [Exterior Colors](#exterior-colors)
+    * [CSV Datafeed](#csv-datafeed)
+    * [CSV Datafeed Last Update](#csv-datafeed-last-update)
+    * [Vehicle Attributes](#vehicle-attributes)
+    * [Account Requests](#account-requests)
+    * [Account Requests Today](#account-requests-today)
+<!-- TOC -->
 
 ## Install
 
@@ -21,10 +54,21 @@ composer require car-api-team/carapi-php-sdk
 If your project has a discoverable HTTP client then the SDK will use that automatically. If it does not, you will 
 need to add one. You can read more about HTTP discovery here: https://github.com/php-http/discovery
 
-## Usage
+## General Usage
 
 Create the SDK instance using your token and secret. The following example assumes you've stored them in an `.env` 
 file, but you may load them in as you please.
+
+For users on the V2 OEM API:
+
+```php
+$sdk = \CarApiSdk\CarApiOem::build([
+    'token' => getenv('CARAPI_TOKEN'),
+    'secret' => getenv('CARAPI_SECRET'),
+]);
+```
+
+For users on the V1 API: 
 
 ```php
 $sdk = \CarApiSdk\CarApi::build([
@@ -39,6 +83,19 @@ You have now created an instance of the SDK.
 
 You may also set `httpVersion` and `encoding`. The HTTP version defaults to 1.1 and we recommend keeping it at that 
 version. Encoding is off by default, but GZIP is supported (note: you will need the zlib extension loaded). Example:
+
+For users on the V2 OEM API:
+
+```php
+$sdk = \CarApiSdk\CarApiOem::build([
+    'token' => getenv('CARAPI_TOKEN'),
+    'secret' => getenv('CARAPI_SECRET'),
+    'httpVersion' => '2.0', // we recommend keeping the default 1.1
+    'encoding' => ['gzip'],
+]);
+```
+
+For users on the V1 API:
 
 ```php
 $sdk = \CarApiSdk\CarApi::build([
@@ -71,6 +128,8 @@ if (empty($jwt) || $sdk->loadJwt($jwt)->isJwtExpired() !== false) {
 // make your api calls here...
 ```
 
+Authentication works the same regardless of which version of the API you are on.
+
 ### Passing query parameters
 
 Query parameters can be passed to api endpoints as key-value arrays.
@@ -78,6 +137,8 @@ Query parameters can be passed to api endpoints as key-value arrays.
 ```php
 $sdk->years(['query' => ['make' => 'Tesla']]);
 ```
+
+This works the same in both versions.
 
 ### Passing JSON searches
 
@@ -88,6 +149,8 @@ $json = (new \CarApiSdk\JsonSearch())
     ->addItem(new \CarApiSdk\JsonSearchItem('make', 'in', ['Tesla']));
 $sdk->years(['query' => ['json' => $json]])
 ```
+
+This works the same in both versions.
 
 ### Pagination
 
@@ -104,201 +167,18 @@ do {
 } while ($page <= $lastPage);
 ```
 
+This works the same in both versions.
+
 ### Exceptions
 
 The SDK will throw \CarApiSdk\CarApiException on errors. In some cases, this is just catching and rethrowing 
 underlying HTTP Exceptions or JSON Exceptions. In most cases, this will capture errors from the API response 
 and format them into a CarApiException.
 
-### Years
+## V2 OEM API Methods
 
-The years method returns an array of integers.
+Browse the [V2 OEM API methods](/docs/v2.md)
 
-```php
-$years = $sdk->years();
-foreach ($years as $year) {
-    echo $year;
-}
-```
+## V1 API Methods
 
-Get all years that Tesla sold cars:
-
-```php
-$sdk->years(['query' => ['make' => 'Tesla']]);
-```
-
-### Makes
-
-Returns a collection.
-
-```php
-foreach ($sdk->makes()->data as $make) {
-    echo $make->name;
-}
-```
-
-Get all makes for 2020:
-
-```php
-$sdk->makes(['query' => ['year' => 2020]]);
-```
-
-### Models
-
-Returns a collection.
-
-```php
-foreach ($sdk->models()->data as $model) {
-    echo $model->name;
-}
-```
-
-Getting all 2020 Toyota models:
-
-```php
-$sdk->models(['query' => ['year' => 2020, 'make' => 'Toyota']]);
-```
-
-### Trims
-
-Returns a collection.
-
-```php
-foreach ($sdk->trims()->data as $trim) {
-    echo $trim->name;
-}
-```
-
-Getting all 2020 Ford F-150 trims:
-
-```php
-$sdk->trims(['query' => ['year' => 2020, 'make' => 'Ford', 'model' => 'F-150']]);
-```
-
-Getting all 2020 Ford F-150 and F-250 trims:
-
-```php
-$json = (new \CarApiSdk\JsonSearch())
-    ->addItem(new \CarApiSdk\JsonSearchItem('model', 'in', ['F-150', 'F-250']));
-$sdk->trims(['query' => ['year' => 2020, 'make' => 'Ford', 'json' => $json]]);
-```
-
-Get all sedans by Toyota or Ford in 2020:
-
-```php
-$json = (new \CarApiSdk\JsonSearch())
-    ->addItem(new \CarApiSdk\JsonSearchItem('make', 'in', ['Toyota', 'Ford']));
-    ->addItem(new \CarApiSdk\JsonSearchItem('bodies.type', '=', 'Sedan'));
-$result = $sdk->trims(['query' => ['year' => 2020, 'json' => $json]]);
-foreach ($result->data as $trim) {
-    echo $trim->name;
-}
-```
-
-Or for a single trim an object is returned:
-
-```php
-echo $sdk->trimItem($id)->name;
-```
-
-### Vin
-
-Returns an object
-
-```php
-$sdk->vin('1GTG6CEN0L1139305');
-```
-
-Loop through all trims returned by a vin lookup:
-
-```php
-foreach ($sdk->vin('1GTG6CEN0L1139305')->trims as $trim) {
-    echo $trim->name;
-}
-```
-
-### Bodies
-
-Returns a collection.
-
-```php
-foreach ($sdk->bodies()->data as $body) {
-    echo $body->type;
-}
-```
-
-### Engines
-
-Returns a collection.
-
-```php
-foreach ($sdk->engines()->data as $engine) {
-    echo $engine->engine_type;
-}
-```
-
-### Mileages
-
-Returns a collection.
-
-```php
-$sdk->mileages();
-```
-
-### Interior Colors
-
-Returns a collection.
-
-```php
-$sdk->interiorColors();
-```
-
-### Exterior Colors
-
-Returns a collection.
-
-```php
-$sdk->exteriorColors();
-```
-
-
-### CSV Datafeed
-
-Returns the datafeed as a ResponseInterface. You will need handle extracting the file out in your application.
-
-```php
-$sdk->csvDataFeed();
-```
-
-### CSV Datafeed Last Update
-
-Returns an object.
-
-```php
-$sdk->csvDataFeedLastUpdated();
-```
-
-
-### Vehicle Attributes
-
-Returns an array of strings.
-
-```php
-$sdk->vehicleAttributes('bodies.type');
-```
-
-### Account Requests
-
-Returns an array of objects.
-
-```php
-$sdk->accountRequests();
-```
-
-### Account Requests Today
-
-Returns an object:
-
-```php
-$sdk->accountRequestsToday();
-```
+Browse the [V1 API methods](/docs/v1.md)

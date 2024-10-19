@@ -11,7 +11,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Http\Message\UriFactoryInterface;
 
-class CarApi
+class CarApiOem
 {
     use RequestResponseTrait;
     private string $host;
@@ -31,7 +31,7 @@ class CarApi
     {
         $this->config = $config;
         $this->client = $client ?? new Psr18Client();
-        $this->host = ($config->host ?? 'https://carapi.app') . '/api';
+        $this->host = ($config->host ?? 'https://api.carapi.app') . '/oem';
         $this->streamFactory = Psr17FactoryDiscovery::findStreamFactory();
         $this->uriFactory = Psr17FactoryDiscovery::findUriFactory();
     }
@@ -146,7 +146,7 @@ class CarApi
     }
 
     /**
-     * Return vehicle years.
+     * Return OEM years.
      *
      * @param array $options An array of options to pass into the request.
      *
@@ -159,7 +159,7 @@ class CarApi
     }
 
     /**
-     * Return vehicle makes.
+     * Return OEM makes.
      *
      * @param array $options An array of options to pass into the request.
      *
@@ -172,7 +172,7 @@ class CarApi
     }
 
     /**
-     * Return vehicle models
+     * Return OEM models
      *
      * @param array $options An array of options to pass into the request.
      *
@@ -185,7 +185,33 @@ class CarApi
     }
 
     /**
-     * Return vehicle trims
+     * Return OEM sub-models
+     *
+     * @param array $options An array of options to pass into the request.
+     *
+     * @return \stdClass
+     * @throws CarApiException
+     */
+    public function submodels(array $options = []): \stdClass
+    {
+        return $this->getDecoded('/submodels', $options);
+    }
+
+    /**
+     * Return a single OEM sub-model.
+     *
+     * @param int $id The ID of the Trim
+     *
+     * @return \stdClass
+     * @throws CarApiException
+     */
+    public function submodelItem(int $id): \stdClass
+    {
+        return $this->getDecoded(sprintf('/submodels/%s', $id));
+    }
+
+    /**
+     * Return OEM trims
      *
      * @param array $options An array of options to pass into the request.
      *
@@ -198,7 +224,7 @@ class CarApi
     }
 
     /**
-     * Return a single vehicle trim.
+     * Return a single OEM trim.
      *
      * @param int $id The ID of the Trim
      *
@@ -222,71 +248,6 @@ class CarApi
     public function vin(string $vin, array $options = []): \stdClass
     {
         return $this->getDecoded(sprintf('/vin/%s', $vin), $options);
-    }
-
-    /**
-     * Return vehicle bodies.
-     *
-     * @param array $options An array of options to pass into the request.
-     *
-     * @return \stdClass
-     * @throws CarApiException
-     */
-    public function bodies(array $options = []): \stdClass
-    {
-        return $this->getDecoded('/bodies', $options);
-    }
-
-    /**
-     * Return vehicle engines.
-     *
-     * @param array $options An array of options to pass into the request.
-     *
-     * @return \stdClass
-     * @throws CarApiException
-     */
-    public function engines(array $options = []): \stdClass
-    {
-        return $this->getDecoded('/engines', $options);
-    }
-
-    /**
-     * Return vehicle mileages.
-     *
-     * @param array $options An array of options to pass into the request.
-     *
-     * @return \stdClass
-     * @throws CarApiException
-     */
-    public function mileages(array $options = []): \stdClass
-    {
-        return $this->getDecoded('/mileages', $options);
-    }
-
-    /**
-     * Return vehicle interior colors.
-     *
-     * @param array $options An array of options to pass into the request.
-     *
-     * @return \stdClass
-     * @throws CarApiException
-     */
-    public function interiorColors(array $options = []): \stdClass
-    {
-        return $this->getDecoded('/interior-colors', $options);
-    }
-
-    /**
-     * Return vehicle exterior colors.
-     *
-     * @param array $options An array of options to pass into the request.
-     *
-     * @return \stdClass
-     * @throws CarApiException
-     */
-    public function exteriorColors(array $options = []): \stdClass
-    {
-        return $this->getDecoded('/exterior-colors', $options);
     }
 
     /**
