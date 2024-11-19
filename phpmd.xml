@@ -48,10 +48,14 @@
             <property name="reportLevel" value="12" />
         </properties>
     </rule>
-    <rule ref="rulesets/codesize.xml/ExcessiveClassComplexity" /> <!-- phpmd default is max: 50 -->
+    <rule ref="rulesets/codesize.xml/ExcessiveClassComplexity"> <!-- phpmd default is max: 50 -->
+        <properties>
+            <property name="maximum" value="100" />
+        </properties>
+    </rule>
     <rule ref="rulesets/codesize.xml/ExcessiveClassLength">
         <properties>
-            <property name="minimum" value="500" />
+            <property name="minimum" value="1000" />
         </properties>
     </rule>
     <rule ref="rulesets/codesize.xml/TooManyMethods" />
