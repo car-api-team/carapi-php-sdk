@@ -256,7 +256,7 @@ class CarApi
      */
     public function obdCodes(array $options = []): \stdClass
     {
-        return $this->getDecoded('/api/obd-codes', $options);
+        return $this->getDecoded('/obd-codes', $options);
     }
 
     /**
@@ -269,7 +269,7 @@ class CarApi
      */
     public function obdCodeItem(string $code): \stdClass
     {
-        return $this->getDecoded(sprintf('/api/obd-codes/%s', $code));
+        return $this->getDecoded(sprintf('/obd-codes/%s', $code));
     }
 
     /**
