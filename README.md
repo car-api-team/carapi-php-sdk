@@ -261,6 +261,29 @@ Returns a collection.
 $sdk->exteriorColors();
 ```
 
+### License Plate
+
+Returns an object.
+
+```php
+$sdk->licensePlate('US', 'LNP8460#TEST', 'NY');
+```
+
+### OBD Diagnostic Code Search
+
+Returns a collection.
+
+```php
+$sdk->obdCodes();
+```
+
+### Get single OBD Diagnostic Code
+
+Returns an object.
+
+```php
+$sdk->obdCodeItem('B1200');
+```
 
 ### CSV Datafeed
 

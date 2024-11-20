@@ -89,6 +89,7 @@ class CarApiTest extends TestCase
             ['accountRequests'],
             ['accountRequestsToday'],
             ['csvDataFeedLastUpdated'],
+            ['obdCodes'],
         ];
     }
 
@@ -116,6 +117,24 @@ class CarApiTest extends TestCase
         $client = $this->createMockClient(200, '{"data": []}');
         $sdk = new CarApi($config, $client);
         $obj = $sdk->vin('123');
+        $this->assertObjectHasProperty('data', $obj);
+    }
+
+    public function test_license_plate(): void
+    {
+        $config = CarApiConfig::build(['token' => '1', 'secret' => '1']);
+        $client = $this->createMockClient(200, '{"data": []}');
+        $sdk = new CarApi($config, $client);
+        $obj = $sdk->licensePlate('US', 'LNP8460#TEST', 'NY');
+        $this->assertObjectHasProperty('data', $obj);
+    }
+
+    public function test_single_obd_code(): void
+    {
+        $config = CarApiConfig::build(['token' => '1', 'secret' => '1']);
+        $client = $this->createMockClient(200, '{"data": []}');
+        $sdk = new CarApi($config, $client);
+        $obj = $sdk->obdCodeItem('B1200');
         $this->assertObjectHasProperty('data', $obj);
     }
 

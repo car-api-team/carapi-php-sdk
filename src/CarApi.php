@@ -224,6 +224,55 @@ class CarApi
     }
 
     /**
+     * License Plate Search
+     *
+     * @param string      $countryCode ISO 3166-1 alpha-2 country code (two letters)
+     * @param string      $lookup      The license plate (registration in some countries) to lookup
+     * @param string|null $region      Province, region or state (required for US, CA and AU)
+     *
+     * @return \stdClass
+     * @throws CarApiException
+     */
+    public function licensePlate(string $countryCode, string $lookup, ?string $region = null): \stdClass
+    {
+        return $this->getDecoded(
+            '/license-plate', [
+            'query' => [
+                'country_code' => $countryCode,
+                'lookup' => $lookup,
+                'region' => $region,
+            ]
+            ]
+        );
+    }
+
+    /**
+     * OBD-II Code Search
+     *
+     * @param array $options An array of options to pass into the request.
+     *
+     * @return \stdClass
+     * @throws CarApiException
+     */
+    public function obdCodes(array $options = []): \stdClass
+    {
+        return $this->getDecoded('/obd-codes', $options);
+    }
+
+    /**
+     * Get a single OBD-II Code
+     *
+     * @param string $code The OBD code
+     *
+     * @return \stdClass
+     * @throws CarApiException
+     */
+    public function obdCodeItem(string $code): \stdClass
+    {
+        return $this->getDecoded(sprintf('/obd-codes/%s', $code));
+    }
+
+    /**
      * Return vehicle bodies.
      *
      * @param array $options An array of options to pass into the request.
