@@ -90,7 +90,7 @@ class CarApi
             && in_array('gzip', $this->config->encoding) 
             && \extension_loaded('zlib')
         ) {
-            $body = gzdecode($body);
+            $body = gzdecode(base64_decode($body));
             if ($body === false) {
                 throw new CarApiException('Unable to decompress response. Maybe try without gzip.');
             }
@@ -441,7 +441,7 @@ class CarApi
             && in_array('gzip', $this->config->encoding) 
             && \extension_loaded('zlib')
         ) {
-            $body = gzdecode($body);
+            $body = gzdecode(base64_decode($body));
             if ($body === false) {
                 throw new CarApiException('Unable to decompress response. Maybe try without gzip.');
             }

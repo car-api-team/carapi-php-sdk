@@ -41,6 +41,16 @@ class CarApiTest extends TestCase
         $this->assertNotEmpty($jwt);
     }
 
+    public function test_authenticate_with_gzip(): void
+    {
+        $config = CarApiConfig::build(['token' => '1', 'secret' => '1', 'encoding' => ['gzip']]);
+        $body = base64_encode(gzencode('1.2.3'));
+        $client = $this->createMockClient(200, $body, ['Content-Encoding' => 'gzip']);
+        $sdk = new CarApi($config, $client);
+        $jwt = $sdk->authenticate();
+        $this->assertNotEmpty($jwt);
+    }
+
     public function test_authenticate_fails(): void
     {
         $config = CarApiConfig::build(['token' => '1', 'secret' => '1']);
@@ -241,6 +251,17 @@ class CarApiTest extends TestCase
         $sdk->loadJwt($jwt)->isJwtExpired();
     }
 
+    public function test_gzip_encoding(): void
+    {
+        $config = CarApiConfig::build(['token' => '1', 'secret' => '1', 'encoding' => ['gzip']]);
+        $body = base64_encode(gzencode('["data"]'));
+        $clientMock = $this->createMockClient(200, $body, ['Content-Encoding' => 'gzip']);
+
+        $sdk = new CarApi($config, $clientMock);
+        $arr = $sdk->years();
+        $this->assertNotEmpty($arr);
+    }
+
     public static function dataProviderForBadJwt(): array
     {
         return [
@@ -255,15 +276,17 @@ class CarApiTest extends TestCase
      * @return MockObject&Psr18Client
      * @throws \PHPUnit\Framework\MockObject\Exception
      */
-    private function createMockClient(int $statusCode, string $responseBody): MockObject
+    private function createMockClient(int $statusCode, string $responseBody, array $headers = []): MockObject
     {
         $responseMock = $this->createPartialMock(Response::class, [
             'getStatusCode',
             'getBody',
+            'getHeader',
         ]);
         $stream = Psr17FactoryDiscovery::findStreamFactory()->createStream($responseBody);
         $responseMock->method('getStatusCode')->willReturn($statusCode);
         $responseMock->method('getBody')->willReturn($stream);
+        $responseMock->method('getHeader')->willReturn($headers);
         $clientMock = $this->createPartialMock(Psr18Client::class, ['sendRequest']);
         $clientMock->method('sendRequest')->willReturn($responseMock);
 
