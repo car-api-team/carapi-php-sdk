@@ -86,10 +86,9 @@ class CarApi
         }
 
         $encoding = array_map(fn (string $str) => strtolower($str), $response->getHeader('Content-Encoding'));
-        if (
-            in_array('gzip', $encoding) &&
-            in_array('gzip', $this->config->encoding) &&
-            \extension_loaded('zlib')
+        if (in_array('gzip', $encoding) 
+            && in_array('gzip', $this->config->encoding) 
+            && \extension_loaded('zlib')
         ) {
             $body = gzdecode($body);
             if ($body === false) {
@@ -247,7 +246,8 @@ class CarApi
                 'lookup' => $lookup,
                 'region' => $region,
             ]
-        ]);
+            ]
+        );
     }
 
     /**
@@ -437,10 +437,9 @@ class CarApi
         $body = (string) $response->getBody();
 
         $encoding = array_map(fn (string $str) => strtolower($str), $response->getHeader('Content-Encoding'));
-        if (
-            in_array('gzip', $encoding) &&
-            in_array('gzip', $this->config->encoding) &&
-            \extension_loaded('zlib')
+        if (in_array('gzip', $encoding) 
+            && in_array('gzip', $this->config->encoding) 
+            && \extension_loaded('zlib')
         ) {
             $body = gzdecode($body);
             if ($body === false) {
