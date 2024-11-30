@@ -85,7 +85,12 @@ class CarApi
             );
         }
 
-        if (in_array('gzip', $this->config->encoding) && \extension_loaded('zlib')) {
+        $encoding = array_map(fn (string $str) => strtolower($str), $response->getHeader('Content-Encoding'));
+        if (
+            in_array('gzip', $encoding) &&
+            in_array('gzip', $this->config->encoding) &&
+            \extension_loaded('zlib')
+        ) {
             $body = gzdecode($body);
             if ($body === false) {
                 throw new CarApiException('Unable to decompress response. Maybe try without gzip.');
@@ -242,8 +247,7 @@ class CarApi
                 'lookup' => $lookup,
                 'region' => $region,
             ]
-            ]
-        );
+        ]);
     }
 
     /**
@@ -432,7 +436,12 @@ class CarApi
         $response = $this->get($url, $options);
         $body = (string) $response->getBody();
 
-        if (in_array('gzip', $this->config->encoding) && \extension_loaded('zlib')) {
+        $encoding = array_map(fn (string $str) => strtolower($str), $response->getHeader('Content-Encoding'));
+        if (
+            in_array('gzip', $encoding) &&
+            in_array('gzip', $this->config->encoding) &&
+            \extension_loaded('zlib')
+        ) {
             $body = gzdecode($body);
             if ($body === false) {
                 throw new CarApiException('Unable to decompress response. Maybe try without gzip.');
