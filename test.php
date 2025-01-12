@@ -9,7 +9,7 @@ use CarApiSdk\JsonSearchItem;
 use CarApiSdk\Powersports;
 
 /*
- * This file runs a test against production using the SDK. You must create a .env file with a TOKEN and a SECRET.
+ * This file runs a live test using the SDK. You must create a .env file with a TOKEN, SECRET and HOST.
  *
  * This can be run via: php test.php
  */
@@ -19,8 +19,8 @@ $env = (new josegonzalez\Dotenv\Loader('./.env'))
     ->toEnv()
     ->toArray();
 
-if (!isset($env['TOKEN'], $env['SECRET'])) {
-    throw new LogicException('An .env file is required and must contain TOKEN and SECRET.');
+if (!isset($env['TOKEN'], $env['SECRET'], $env['HOST'])) {
+    throw new LogicException('An .env file is required and must contain a TOKEN, SECRET and HOST.');
 }
 
 function println(string $string) {
@@ -30,7 +30,7 @@ function println(string $string) {
 $sdk = CarApi::build([
     'token' => $env['TOKEN'],
     'secret' => $env['SECRET'],
-    'host' => 'http://localhost:8080',
+    'host' => $env['HOST'],
     'httpVersion' => '1.1',
     'encoding' => ['gzip'],
 ]);
