@@ -16,6 +16,7 @@
         "psr/http-factory-implementation": "1.0"
     },
     "require-dev": {
+        "ext-zlib": "*",
         "josegonzalez/dotenv": "^4.0",
         "phpunit/phpunit": "^9.0",
         "php-http/mock-client": "^1.6",
