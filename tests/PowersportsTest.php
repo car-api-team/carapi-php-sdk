@@ -87,6 +87,17 @@ class PowersportsTest extends TestCase
         $this->assertNotEmpty($arr);
     }
 
+    public function test_gzip_encoding(): void
+    {
+        $config = CarApiConfig::build(['token' => '1', 'secret' => '1', 'encoding' => ['gzip']]);
+        $body = base64_encode(gzencode('["data"]'));
+        $clientMock = $this->createMockClient(200, $body, ['Content-Encoding' => 'gzip']);
+
+        $sdk = new Powersports($config, $clientMock);
+        $arr = $sdk->years();
+        $this->assertNotEmpty($arr);
+    }
+
     /**
      * @param int $statusCode
      * @param string $responseBody

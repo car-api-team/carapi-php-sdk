@@ -41,6 +41,16 @@ class BaseApiTest extends TestCase
         $this->assertNotEmpty($jwt);
     }
 
+    public function test_authenticate_with_gzip(): void
+    {
+        $config = CarApiConfig::build(['token' => '1', 'secret' => '1', 'encoding' => ['gzip']]);
+        $body = base64_encode(gzencode('1.2.3'));
+        $client = $this->createMockClient(200, $body, ['Content-Encoding' => 'gzip']);
+        $sdk = new BaseApi($config, $client);
+        $jwt = $sdk->authenticate();
+        $this->assertNotEmpty($jwt);
+    }
+
     public function test_authenticate_fails(): void
     {
         $config = CarApiConfig::build(['token' => '1', 'secret' => '1']);
