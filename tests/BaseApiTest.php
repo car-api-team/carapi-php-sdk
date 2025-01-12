@@ -14,6 +14,8 @@ use PHPUnit\Framework\TestCase;
 
 class BaseApiTest extends TestCase
 {
+    use TestHelperTrait;
+
     /**
      * @dataProvider dataProviderForBuildOptions
      */
@@ -123,26 +125,5 @@ class BaseApiTest extends TestCase
             ['bad jwt', 'JWT is invalid'],
             ['1..3', 'Error decoding JWT'],
         ];
-    }
-
-    /**
-     * @param int $statusCode
-     * @param string $responseBody
-     * @return MockObject&Psr18Client
-     * @throws \PHPUnit\Framework\MockObject\Exception
-     */
-    private function createMockClient(int $statusCode, string $responseBody): MockObject
-    {
-        $responseMock = $this->createPartialMock(Response::class, [
-            'getStatusCode',
-            'getBody',
-        ]);
-        $stream = Psr17FactoryDiscovery::findStreamFactory()->createStream($responseBody);
-        $responseMock->method('getStatusCode')->willReturn($statusCode);
-        $responseMock->method('getBody')->willReturn($stream);
-        $clientMock = $this->createPartialMock(Psr18Client::class, ['sendRequest']);
-        $clientMock->method('sendRequest')->willReturn($responseMock);
-
-        return $clientMock;
     }
 }

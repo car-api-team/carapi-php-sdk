@@ -8,14 +8,12 @@ use CarApiSdk\CarApiConfig;
 use CarApiSdk\CarApiException;
 use CarApiSdk\JsonSearch;
 use CarApiSdk\JsonSearchItem;
-use Http\Discovery\Psr17FactoryDiscovery;
-use Http\Discovery\Psr18Client;
-use Nyholm\Psr7\Response;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class CarApiTest extends TestCase
 {
+    use TestHelperTrait;
+
     /**
      * @dataProvider dataProviderForMethods
      */
@@ -159,26 +157,5 @@ class CarApiTest extends TestCase
         $sdk = new CarApi($config, $clientMock);
         $arr = $sdk->years();
         $this->assertNotEmpty($arr);
-    }
-
-    /**
-     * @param int $statusCode
-     * @param string $responseBody
-     * @return MockObject&Psr18Client
-     * @throws \PHPUnit\Framework\MockObject\Exception
-     */
-    private function createMockClient(int $statusCode, string $responseBody): MockObject
-    {
-        $responseMock = $this->createPartialMock(Response::class, [
-            'getStatusCode',
-            'getBody',
-        ]);
-        $stream = Psr17FactoryDiscovery::findStreamFactory()->createStream($responseBody);
-        $responseMock->method('getStatusCode')->willReturn($statusCode);
-        $responseMock->method('getBody')->willReturn($stream);
-        $clientMock = $this->createPartialMock(Psr18Client::class, ['sendRequest']);
-        $clientMock->method('sendRequest')->willReturn($responseMock);
-
-        return $clientMock;
     }
 }

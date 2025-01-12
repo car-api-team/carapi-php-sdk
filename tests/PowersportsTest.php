@@ -16,6 +16,8 @@ use PHPUnit\Framework\TestCase;
 
 class PowersportsTest extends TestCase
 {
+    use TestHelperTrait;
+
     /**
      * @dataProvider dataProviderForMethods
      */
@@ -96,26 +98,5 @@ class PowersportsTest extends TestCase
         $sdk = new Powersports($config, $clientMock);
         $arr = $sdk->years();
         $this->assertNotEmpty($arr);
-    }
-
-    /**
-     * @param int $statusCode
-     * @param string $responseBody
-     * @return MockObject&Psr18Client
-     * @throws \PHPUnit\Framework\MockObject\Exception
-     */
-    private function createMockClient(int $statusCode, string $responseBody): MockObject
-    {
-        $responseMock = $this->createPartialMock(Response::class, [
-            'getStatusCode',
-            'getBody',
-        ]);
-        $stream = Psr17FactoryDiscovery::findStreamFactory()->createStream($responseBody);
-        $responseMock->method('getStatusCode')->willReturn($statusCode);
-        $responseMock->method('getBody')->willReturn($stream);
-        $clientMock = $this->createPartialMock(Psr18Client::class, ['sendRequest']);
-        $clientMock->method('sendRequest')->willReturn($responseMock);
-
-        return $clientMock;
     }
 }
