@@ -33,7 +33,14 @@ $sdk = \CarApiSdk\CarApi::build([
 ]);
 ```
 
-You have now created an instance of the SDK.
+You have now created an instance of the SDK. For Powersports use the following:
+
+```php
+$sdk = \CarApiSdk\Powersports::build([
+    'token' => getenv('CARAPI_TOKEN'),
+    'secret' => getenv('CARAPI_SECRET'),
+]);
+```
 
 ### Other Options
 
