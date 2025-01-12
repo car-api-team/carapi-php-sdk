@@ -25,7 +25,7 @@ class BaseApi
      * @param CarApiConfig     $config An instance of CarApiConfig
      * @param Psr18Client|null $client If left null an instance will be created automatically
      */
-    public function __construct(CarApiConfig $config, Psr18Client $client = null)
+    public function __construct(CarApiConfig $config, ?Psr18Client $client = null)
     {
         $this->config = $config;
         $this->client = $client ?? new Psr18Client();
