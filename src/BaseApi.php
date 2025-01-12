@@ -35,18 +35,6 @@ class BaseApi
     }
 
     /**
-     * Builds the SDK. Look at CarApiConfig for all options possible.
-     *
-     * @param array $options See CarApiConfig for options
-     *
-     * @return self
-     */
-    public static function build(array $options): self
-    {
-        return new self(CarApiConfig::build($options));
-    }
-
-    /**
      * Returns a JWT.
      *
      * @return string

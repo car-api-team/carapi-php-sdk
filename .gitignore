@@ -1,7 +1,6 @@
 # PHP specific files #
 ##########################
 /vendor/*
-/test.php
 
 # OS generated files #
 ######################

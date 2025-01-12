@@ -8,6 +8,18 @@ use Psr\Http\Message\ResponseInterface;
 class CarApi extends BaseApi
 {
     /**
+     * Builds the SDK. Look at CarApiConfig for all options possible.
+     *
+     * @param array $options See CarApiConfig for options
+     *
+     * @return self
+     */
+    public static function build(array $options): self
+    {
+        return new self(CarApiConfig::build($options));
+    }
+
+    /**
      * Return vehicle years.
      *
      * @param array $options An array of options to pass into the request.
