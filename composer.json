@@ -13,7 +13,7 @@
         "ext-json": "*",
         "php-http/discovery": "^1.19",
         "psr/http-client-implementation": "^1.0",
-        "psr/http-factory-implementation": "1.0"
+        "psr/http-factory-implementation": "^1.0"
     },
     "require-dev": {
         "ext-zlib": "*",
