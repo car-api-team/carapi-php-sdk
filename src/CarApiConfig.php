@@ -22,6 +22,7 @@ class CarApiConfig
      * @param array       $encoding    Sets the accepts-encoding request header, default: []. To enable decoding
      *                                 set this option to ['gzip'] and ensure you have the gzip extension
      *                                 loaded.
+     * @param string      $apiVersion  The version of the API to make requests for.
      */
     public function __construct(
         string $token,
@@ -55,11 +56,13 @@ class CarApiConfig
 
         $validVersions = ['v1', 'v2'];
         if (isset($configs['apiVersion']) && !in_array($configs['apiVersion'], $validVersions)) {
-            throw new CarApiException(sprintf(
-                'Invalid API version. Must be one of (%s) but was given: %s',
-                implode(', ', $validVersions),
-                $configs['apiVersion']
-            ));
+            throw new CarApiException(
+                sprintf(
+                    'Invalid API version. Must be one of (%s) but was given: %s',
+                    implode(', ', $validVersions),
+                    $configs['apiVersion']
+                )
+            );
         }
 
         return new self(
