@@ -177,10 +177,10 @@ foreach ($sdk->submodels()->data as $submodel) {
 }
 ```
 
-Getting all 2020 Toyota Camry models:
+Getting all 2020 Toyota Camry submodels:
 
 ```php
-$sdk->models(['query' => ['year' => 2020, 'make' => 'Toyota', 'model' => 'Camry']]);
+$sdk->submodels(['query' => ['year' => 2020, 'make' => 'Toyota', 'model' => 'Camry']]);
 ```
 
 ### Trims
