@@ -53,6 +53,7 @@ $sdk = \CarApiSdk\CarApi::build([
     'secret' => getenv('CARAPI_SECRET'),
     'httpVersion' => '2.0', // we recommend keeping the default 1.1
     'encoding' => ['gzip'],
+    'apiVersion' => 'v1' // the default is v2
 ]);
 ```
 

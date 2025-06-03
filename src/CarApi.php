@@ -13,6 +13,7 @@ class CarApi extends BaseApi
      * @param array $options See CarApiConfig for options
      *
      * @return self
+     * @throws CarApiException
      */
     public static function build(array $options): self
     {
@@ -29,7 +30,7 @@ class CarApi extends BaseApi
      */
     public function years(array $options = []): array
     {
-        return $this->getDecoded('/years', $options, true);
+        return $this->getDecoded('/years' . $this->apiVersion, $options, true);
     }
 
     /**
@@ -42,7 +43,7 @@ class CarApi extends BaseApi
      */
     public function makes(array $options = []): \stdClass
     {
-        return $this->getDecoded('/makes', $options);
+        return $this->getDecoded('/makes'  . $this->apiVersion, $options);
     }
 
     /**
@@ -55,7 +56,20 @@ class CarApi extends BaseApi
      */
     public function models(array $options = []): \stdClass
     {
-        return $this->getDecoded('/models', $options);
+        return $this->getDecoded('/models' . $this->apiVersion, $options);
+    }
+
+    /**
+     * Return vehicle submodels
+     *
+     * @param array $options An array of options to pass into the request.
+     *
+     * @return \stdClass
+     * @throws CarApiException
+     */
+    public function submodels(array $options = []): \stdClass
+    {
+        return $this->getDecoded('/submodels/v2', $options);
     }
 
     /**
@@ -68,7 +82,7 @@ class CarApi extends BaseApi
      */
     public function trims(array $options = []): \stdClass
     {
-        return $this->getDecoded('/trims', $options);
+        return $this->getDecoded('/trims' . $this->apiVersion, $options);
     }
 
     /**
@@ -81,7 +95,7 @@ class CarApi extends BaseApi
      */
     public function trimItem(int $id): \stdClass
     {
-        return $this->getDecoded(sprintf('/trims/%s', $id));
+        return $this->getDecoded(sprintf('/trims' . $this->apiVersion . '/%s', $id));
     }
 
     /**
@@ -157,7 +171,7 @@ class CarApi extends BaseApi
      */
     public function bodies(array $options = []): \stdClass
     {
-        return $this->getDecoded('/bodies', $options);
+        return $this->getDecoded('/bodies' . $this->apiVersion, $options);
     }
 
     /**
@@ -170,7 +184,7 @@ class CarApi extends BaseApi
      */
     public function engines(array $options = []): \stdClass
     {
-        return $this->getDecoded('/engines', $options);
+        return $this->getDecoded('/engines' . $this->apiVersion, $options);
     }
 
     /**
@@ -183,7 +197,7 @@ class CarApi extends BaseApi
      */
     public function mileages(array $options = []): \stdClass
     {
-        return $this->getDecoded('/mileages', $options);
+        return $this->getDecoded('/mileages' . $this->apiVersion, $options);
     }
 
     /**
@@ -196,7 +210,7 @@ class CarApi extends BaseApi
      */
     public function interiorColors(array $options = []): \stdClass
     {
-        return $this->getDecoded('/interior-colors', $options);
+        return $this->getDecoded('/interior-colors' . $this->apiVersion, $options);
     }
 
     /**
@@ -209,7 +223,7 @@ class CarApi extends BaseApi
      */
     public function exteriorColors(array $options = []): \stdClass
     {
-        return $this->getDecoded('/exterior-colors', $options);
+        return $this->getDecoded('/exterior-colors' . $this->apiVersion, $options);
     }
 
     /**
