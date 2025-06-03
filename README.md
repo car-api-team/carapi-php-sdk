@@ -167,6 +167,22 @@ Getting all 2020 Toyota models:
 $sdk->models(['query' => ['year' => 2020, 'make' => 'Toyota']]);
 ```
 
+### Submodels
+
+Returns a collection.
+
+```php
+foreach ($sdk->submodels()->data as $submodel) {
+    echo $submodel->submodel;
+}
+```
+
+Getting all 2020 Toyota Camry models:
+
+```php
+$sdk->models(['query' => ['year' => 2020, 'make' => 'Toyota', 'model' => 'Camry']]);
+```
+
 ### Trims
 
 Returns a collection.
