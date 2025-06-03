@@ -10,6 +10,7 @@ class CarApiConfig
     public ?string $host;
     public string $httpVersion;
     public array $encoding;
+    public string $apiVersion;
 
     /**
      * Constructor
@@ -27,13 +28,15 @@ class CarApiConfig
         string $secret,
         ?string $host = null,
         string $httpVersion = '1.1',
-        array $encoding = []
+        array $encoding = [],
+        string $apiVersion = 'v2'
     ) {
         $this->token = $token;
         $this->secret = $secret;
         $this->host = $host;
         $this->httpVersion = $httpVersion;
         $this->encoding = $encoding;
+        $this->apiVersion = $apiVersion;
     }
 
     /**
@@ -50,12 +53,22 @@ class CarApiConfig
             throw new CarApiException('Missing token and/or secret');
         }
 
+        $validVersions = ['v1', 'v2'];
+        if (isset($configs['apiVersion']) && !in_array($configs['apiVersion'], $validVersions)) {
+            throw new CarApiException(sprintf(
+                'Invalid API version. Must be one of (%s) but was given: %s',
+                implode(', ', $validVersions),
+                $configs['apiVersion']
+            ));
+        }
+
         return new self(
             $configs['token'],
             $configs['secret'],
             $configs['host'] ?? null,
             $configs['httpVersion'] ?? '1.1',
             $configs['encoding'] ?? [],
+            $configs['apiVersion'] ?? 'v2',
         );
     }
 }

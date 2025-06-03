@@ -18,6 +18,7 @@ class BaseApi
     protected StreamFactoryInterface $streamFactory;
     protected UriFactoryInterface $uriFactory;
     protected string $jwt;
+    protected string $apiVersion;
 
     /**
      * Construct
@@ -32,6 +33,7 @@ class BaseApi
         $this->host = ($config->host ?? 'https://carapi.app') . '/api';
         $this->streamFactory = Psr17FactoryDiscovery::findStreamFactory();
         $this->uriFactory = Psr17FactoryDiscovery::findUriFactory();
+        $this->apiVersion = $config->apiVersion === 'v2' ? '/v2' : '';
     }
 
     /**

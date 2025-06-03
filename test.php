@@ -33,6 +33,7 @@ $sdk = CarApi::build([
     'host' => $env['HOST'],
     'httpVersion' => '1.1',
     'encoding' => ['gzip'],
+    'apiVersion' => 'v2',
 ]);
 
 println('JWT:' . $sdk->authenticate());

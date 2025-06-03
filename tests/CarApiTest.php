@@ -53,9 +53,54 @@ class CarApiTest extends TestCase
         $this->assertNotEmpty($arr);
     }
 
+    public function test_years_version_2(): void
+    {
+        $config = CarApiConfig::build(['token' => '1', 'secret' => '1', 'apiVersion' => 'v2']);
+        $client = $this->createMockClient(200, '["data"]');
+        $sdk = new CarApi($config, $client);
+        $arr = $sdk->years();
+        $this->assertNotEmpty($arr);
+    }
+
+    /**
+     * @dataProvider dataProviderForV2Methods
+     */
+    public function test_v2_methods_work(string $method): void
+    {
+        $config = CarApiConfig::build(['token' => '1', 'secret' => '1', 'apiVersion' => 'v2']);
+        $client = $this->createMockClient(200, '{"data": []}');
+        $sdk = new CarApi($config, $client);
+        $obj = $sdk->{$method}();
+        $this->assertObjectHasProperty('data', $obj);
+    }
+
+    public static function dataProviderForV2Methods(): array
+    {
+        return [
+            ['makes'],
+            ['models'],
+            ['submodels'],
+            ['trims'],
+            ['bodies'],
+            ['mileages'],
+            ['engines'],
+            ['interiorColors'],
+            ['exteriorColors'],
+        ];
+    }
+
     public function test_trim_item(): void
     {
         $config = CarApiConfig::build(['token' => '1', 'secret' => '1']);
+        $client = $this->createMockClient(200, '{"data": []}');
+        $sdk = new CarApi($config, $client);
+        $obj = $sdk->trimItem(1);
+        $this->assertObjectHasProperty('data', $obj);
+    }
+
+    public function test_trim_item_v2(): void
+    {
+        $config = CarApiConfig::build(['token' => '1', 'secret' => '1', 'apiVersion' => 'v2']);
         $client = $this->createMockClient(200, '{"data": []}');
         $sdk = new CarApi($config, $client);
         $obj = $sdk->trimItem(1);
